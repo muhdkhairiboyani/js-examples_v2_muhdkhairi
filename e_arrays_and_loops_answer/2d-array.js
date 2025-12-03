@@ -30,6 +30,7 @@ const arr2D = [];
 for (let i = 0; i < rows; i++) {
   arr2D[i] = [];      // Does this line create each row (or index) of the 2d array (yes / no)?
 
+  // Manges columns
   for (let j = 0; j < cols; j++) {
     arr2D[i][j] = 0; // Initialize with 0 or any other value (you can amend this to populate with random tiles)
   }

@@ -18,20 +18,16 @@ const RIGHT = "d";
 const QUIT = "q";
 
 // DONE: MSG_UP / MSG_DOWN / MSG_LEFT / MSG_RIGHT / MSG_QUIT / MSG_INVALID message constants
-const MSG_UP = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^ You moved UP ^^^^^^^\n";
-const MSG_DOWN = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nvvvvvv You moved DOWN vvvvvv\n";
-const MSG_LEFT = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<<<<<< You moved LEFT\n";
-const MSG_RIGHT = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n       You moved RIGHT >>>>>\n";
-const MSG_QUIT = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n---- You QUIT the game ----";
-const MSG_INVALID = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nXXXXXX Invalid entry. XXXXXX\n";
-const MSG_WELCOME_TOP = "\n\n\n\n\n****************************\n****** StrangerThings ******\n****************************\n";
-const MSG_WELCOME_TITLE = "\n         Welcome to\n      THE UPSIDE DOWN\n\n****************************\n";
-const MSG_WELCOME_SUB = "\n[Dustin sent you a message]\n\nVecna has trapped Will[^]\nin the Upside Down.\n\nYou[*] must find him!\n";
-const MSG_WELCOME_BOTTOM = "\n****************************\n";
-// const MSG_WELCOME = "\n****************************\n  WELCOME TO FIND YOUR HAT  \n****************************\n";
+const MSG_UP = "\n****************************\n\n------- You moved UP -------\n";
+const MSG_DOWN = "\n****************************\n\n------ You moved DOWN ------\n";
+const MSG_LEFT = "\n****************************\n\n------ You moved LEFT ------\n";
+const MSG_RIGHT = "\n****************************\n\n------ You moved RIGHT -----\n";
+const MSG_QUIT = "\n****************************\n\n---- You QUIT the game ----";
+const MSG_INVALID = "\n****************************\nInvalid entry.\n";
+const MSG_WELCOME = "\n****************************\n  WELCOME TO FIND YOUR HAT  \n****************************\n";
 
 // DONE: WIN / LOSE / OUT / QUIT messages constants
-const WIN = "      CONGRATULATIONS!      \n\n  You found Will. You won!\n\n****************************\n"
+const WIN = "      CONGRATULATIONS!      \n\nYou've found the HAT. You won!\n\n****************************\n"
 const LOSE = "You fell into a hole, you lost!\n"
 const OUT = "You went out-of-bound, you lost!\n"
 
@@ -39,6 +35,7 @@ const OUT = "You went out-of-bound, you lost!\n"
 const ROWS = 10;
 const COLS = 28;
 const PERCENT = 0.2; // variable that set the % of randomization of holes in the game field, now it's 20% 
+
 
 class Field {
   // DONE: constructor, a built-in method of a class (invoked when an object of a class is instantiated)
@@ -71,7 +68,7 @@ class Field {
       }
     }
 
-    // returns map of the field, default is 28x10
+    // returns map of the field, default is 8x8
     return map;
   }
 
@@ -98,8 +95,9 @@ class Field {
     });
   }
 
+  // DONE: updateMove displays the move (key) entered by the user
   /**
-   * DONE: updateMove displays the move (key) entered by the user
+   * 
    * @param {String} m - passes in the value representing the player's movement 
    * @returns 
    */
@@ -145,7 +143,8 @@ class Field {
     this.playerPos.x = newRow;
     this.playerPos.y = newCol;
 
-    // 2. if player x and y position is a hole - LOSE
+    // 2. if player x and y position is a hole
+    // LOSE
     // process.exit()
     if (
       this.field[newRow] &&
@@ -154,8 +153,8 @@ class Field {
       console.log(LOSE);
       process.exit();
     }
-
-    // 3. if player x and y position is out of field - LOSE
+    // 3. if player x and y position is out of field
+    // LOSE
     // process.exit()
     if (
       newRow < 0 || newRow >= ROWS ||
@@ -164,14 +163,13 @@ class Field {
       console.log(OUT);
       process.exit();
     }
-
-    // 4. if player x and y position === x and y of the HAT - WIN
+    // 4. if player x and y position === x and y of the HAT
+    // WIN
     // process.exit()
     if (this.field[newRow][newCol] === HAT) {
       console.log(WIN);
       process.exit();
     }
-    
     // otherwise move the player to the new x and y position based on move
     this.field[newRow][newCol] = PLAYER;
 
@@ -188,18 +186,12 @@ class Field {
     this.field[0][0] = PLAYER;  // positioning the player on the field, based on player's default position
     this.setHat();              // the postion of the Hat
 
+
     // while gamePlay === true, Track players movement
     do {
-
-      this.printField();          // print the formatted field
-      console.log("\n****************************");
-      console.log("****** MAKE YOUR MOVE ******");
-      console.log("****************************");
-      console.log("          Controls          ");
-      console.log("  UP: w |  DOWN: s |");
-      console.log("LEFT: a | RIGHT: d | Quit: q");
       
-      const input = prompt("\nWhich way will you go: \n");
+      this.printField();          // print the formatted field
+      const input = prompt("\n****************************\n****** MAKE YOUR MOVE ******\n****************************\n          Controls          \n  UP: w |  DOWN: s |\nLEFT: a | RIGHT: d | Quit: q\n\nWhich way will you go: ");
 
       switch (input.toLowerCase()) {
         case UP:
@@ -222,23 +214,28 @@ class Field {
           break;
       }
 
-      if (input.toLowerCase() === QUIT)
+      if (input === QUIT)
         this.gamePlay = false; // process.exit(); - another function to exit the program
 
+      // TODO
       this.updateGame(input);
 
     } while (this.gamePlay);
   }
+
+  t
 }
 
 // DONE: Generate a new field - using Field's static method: generateField
 const gameField = Field.generateField(ROWS, COLS, PERCENT);
 
 // DONE: Generate aa welcome message
-Field.welcomeMessage(MSG_WELCOME_TOP + MSG_WELCOME_TITLE + MSG_WELCOME_SUB + MSG_WELCOME_BOTTOM);
+Field.welcomeMessage(MSG_WELCOME);
 
 // DONE: Create a new instance of the game
 const game = new Field(gameField);
 
 // DONE: Invoke method start(...) from the instance of game object
 game.start();
+
+
