@@ -18,22 +18,22 @@ const RIGHT = "d";
 const QUIT = "q";
 
 // DONE: MSG_UP / MSG_DOWN / MSG_LEFT / MSG_RIGHT / MSG_QUIT / MSG_INVALID message constants
-const MSG_UP = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^ You moved UP ^^^^^^^\n";
-const MSG_DOWN = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nvvvvvv You moved DOWN vvvvvv\n";
-const MSG_LEFT = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<<<<<< You moved LEFT\n";
-const MSG_RIGHT = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n       You moved RIGHT >>>>>\n";
-const MSG_QUIT = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n---- You QUIT the game ----";
-const MSG_INVALID = "\n\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nXXXXXX Invalid entry. XXXXXX\n";
+const MSG_UP = "\n\n\n''''''''''''''''''''''''''''\n^^^^^^^ You moved UP ^^^^^^^\n";
+const MSG_DOWN = "\n\n\n''''''''''''''''''''''''''''\nvvvvvv You moved DOWN vvvvvv\n";
+const MSG_LEFT = "\n\n\n''''''''''''''''''''''''''''\n<<<<<< You moved LEFT\n";
+const MSG_RIGHT = "\n\n\n''''''''''''''''''''''''''''\n       You moved RIGHT >>>>>\n";
+const MSG_QUIT = "\n\n''''''''''''''''''''''''''''\n---- You QUIT the game ----\n\n''''''''''''''''''''''''''''\n\n";
+const MSG_INVALID = "\n\n\n''''''''''''''''''''''''''''\n??????? Invalid Move ???????\n";
 const MSG_WELCOME_TOP = "\n\n\n\n\n****************************\n****** StrangerThings ******\n****************************\n";
-const MSG_WELCOME_TITLE = "\n         Welcome to\n      THE UPSIDE DOWN\n\n****************************\n";
-const MSG_WELCOME_SUB = "\n[Dustin sent you a message]\n\nVecna has trapped Will[^]\nin the Upside Down.\n\nYou[*] must find him!\n";
+const MSG_WELCOME_TITLE = "\n         Welcome to\n      THE UPSIDE DOWN\n      - Finding Will -\n****************************\n";
+const MSG_WELCOME_SUB = "\n[Dustin sent you a message]\n\nVecna has trapped Will[^]\nin the Upside Down field.\n\nYou[*] must find him!\n\nI'll tag your position!\n";
 const MSG_WELCOME_BOTTOM = "\n****************************\n";
 // const MSG_WELCOME = "\n****************************\n  WELCOME TO FIND YOUR HAT  \n****************************\n";
 
 // DONE: WIN / LOSE / OUT / QUIT messages constants
-const WIN = "      CONGRATULATIONS!      \n\n  You found Will. You won!\n\n****************************\n"
-const LOSE = "You fell into a hole, you lost!\n"
-const OUT = "You went out-of-bound, you lost!\n"
+const WIN = "      CONGRATULATIONS!      \n\nYou found Will. You did it!!\n\n''''''''''''''''''''''''''''\nLets try again.\n\n____________________________\n\nTo RESTART,\nKey in: node index.js\nPress Enter.\n\n"
+const LOSE = "You fell into a hole, you lost!\n\nLets try again.\n\n____________________________\n\nTo RESTART,\nKey in: node index.js\nPress Enter.\n\n"
+const OUT = "You went out-of-bound!\nLets try again.\n\n____________________________\n\nTo RESTART,\nKey in: node index.js\nPress Enter.\n\n"
 
 // DONE: MAP ROWS, COLUMNS AND PERCENTAGE
 const ROWS = 10;
@@ -109,7 +109,7 @@ class Field {
     if (m === LEFT) return console.log(MSG_LEFT);         // Tell user he move left
     if (m === RIGHT) return console.log(MSG_RIGHT);       // Tell user he move right
     if (m === QUIT) return console.log(MSG_QUIT);      // Tell user he quit the game
-    console.log(MSG_INVALID);
+    //console.log(MSG_INVALID);
   }
 
   // !! TODO: updateGame Assessment Challenge
@@ -171,7 +171,7 @@ class Field {
       console.log(WIN);
       process.exit();
     }
-    
+
     // otherwise move the player to the new x and y position based on move
     this.field[newRow][newCol] = PLAYER;
 
@@ -197,9 +197,9 @@ class Field {
       console.log("****************************");
       console.log("          Controls          ");
       console.log("  UP: w |  DOWN: s |");
-      console.log("LEFT: a | RIGHT: d | Quit: q");
-      
-      const input = prompt("\nWhich way will you go: \n");
+      console.log("LEFT: a | RIGHT: d | Quit: q\n");
+
+      const input = prompt("Which way will you go: ");
 
       switch (input.toLowerCase()) {
         case UP:
@@ -218,12 +218,14 @@ class Field {
           this.updateMove(QUIT);
           break;
         default:
-          this.updateMove(MSG_INVALID);
+          this.updateMove();
           break;
       }
 
-      if (input.toLowerCase() === QUIT)
-        this.gamePlay = false; // process.exit(); - another function to exit the program
+      if (input.toLowerCase() === QUIT) {
+        this.gamePlay = false;
+        continue;               // prevent updateGame() from running
+      }
 
       this.updateGame(input);
 
